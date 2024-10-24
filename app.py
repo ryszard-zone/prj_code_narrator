@@ -52,8 +52,12 @@ def update_filename():
 conn = create_connection()
 create_table(conn)
 
-env = dotenv_values(".env")
-API_KEY = env["OPENAI_API_KEY"]
+# env = dotenv_values(".env")
+# API_KEY = env["OPENAI_API_KEY"]
+
+st.sidebar.header("Wklej swój klucz OpenAI API:")
+API_KEY = st.sidebar.text_input("OpenAI API Key", type="password")
+
 openai_client = OpenAI(api_key=API_KEY)
 
 def main():
