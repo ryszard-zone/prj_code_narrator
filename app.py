@@ -72,7 +72,7 @@ def main():
     st.sidebar.markdown("2. działa w 2 trybach: <span style='color: green;'>szczegółowy</span> - *opisuje każdą linię kodu* ; <span style='color: green;'>ogólny</span> - *opisuje cały kod w jednym zdaniu*", unsafe_allow_html=True)
     st.sidebar.markdown("3. wyjaśnienie jest udzielane w języku <span style='color: green;'>polskim</span> lub <span style='color: green;'>angielskim</span>", unsafe_allow_html=True)
     st.sidebar.markdown('4. Można pytać o kod w wybranym języku programowania', unsafe_allow_html=True)
-    st.sidebar.markdown('5. "Usuń kod" naciskamy dwukrotnie', unsafe_allow_html=True)
+    st.sidebar.markdown('5. "Usuń wyjaśnienie" naciskamy dwukrotnie', unsafe_allow_html=True)
     st.sidebar.markdown('6. Historia pokazuje tylko 20 ostatnich objaśnień', unsafe_allow_html=True)
 
     st.sidebar.markdown("<div style='height: 7px;'></div>", unsafe_allow_html=True)  # Dodatkowy odstęp   
@@ -154,7 +154,7 @@ def main():
             desc_lang = st.radio('Język:', lang_names, index=0, key='desc_lang', horizontal=True)
 
         with col4:
-            if st.button("Usuń kod"):
+            if st.button("Usuń wyjaśnienie"):
                 st.session_state['code_input'] = ""
                 st.session_state['description'] = None
                 st.session_state['clear_code'] = True
