@@ -58,15 +58,15 @@ create_table(conn)
 
 st.sidebar.title(":blue[Objaśniacz kodu]")
 
-st.sidebar.header("Wklej swój klucz OpenAI API:")
-API_KEY = st.sidebar.text_input("OpenAI API Key", type="password")
+# st.sidebar.header("Wklej swój klucz OpenAI API:")
+API_KEY = st.sidebar.text_input("Wklej swój klucz OpenAI API:", type="password")
 
 openai_client = OpenAI(api_key=API_KEY)
 
 def main():
 
     # Nowa postać instrukcji na lewym panelu
-    st.sidebar.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+    st.sidebar.markdown("<div style='height: 7px;'></div>", unsafe_allow_html=True)
     st.sidebar.markdown("<h4 style='color: blue;'>Jak korzystać z aplikacji:</h4>", unsafe_allow_html=True)
     st.sidebar.markdown("1. podaj swój klucz API OpenAI", unsafe_allow_html=True)
     st.sidebar.markdown("2. działa w 2 trybach: <span style='color: green;'>szczegółowy</span> - *opisuje każdą linię kodu* ; <span style='color: green;'>ogólny</span> - *opisuje cały kod w jednym zdaniu*", unsafe_allow_html=True)
@@ -75,23 +75,10 @@ def main():
     st.sidebar.markdown('5. "Usuń kod" naciskamy dwukrotnie', unsafe_allow_html=True)
     st.sidebar.markdown('6. Historia pokazuje tylko 20 ostatnich objaśnień', unsafe_allow_html=True)
 
-    # st.sidebar.markdown(
-    #     """
-    #     <h4 style='color: blue;'>Jak korzystać z aplikacji:</h4>
-    #     1. podaj swój klucz API OpenAI<br>
-    #     2. działa w 2 trybach: <span style='color: green;'>szczegółowy</span> - *opisuje każdą linię kodu* ; <span style='color: green;'>ogólny</span> - *opisuje cały kod w jednym zdaniu*<br>
-    #     3. wyjaśnienie jest udzielane w języku <span style='color: green;'>polskim</span> lub <span style='color: green;'>angielskim</span><br>
-    #     4. Można pytać o kod w wybranym języku programowania<br>
-    #     5. "Usuń kod" naciskamy dwukrotnie<br>
-    #     6. Historia pokazuje tylko 20 ostatnich objaśnień
-    #     """,
-    #     unsafe_allow_html=True
-    # )
-
-    st.sidebar.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)  # Dodatkowy odstęp   
+    st.sidebar.markdown("<div style='height: 7px;'></div>", unsafe_allow_html=True)  # Dodatkowy odstęp   
     prg_language = st.sidebar.selectbox("Wybierz język programowania:", ["python", "sql", "c", "rust"])
 
-    st.sidebar.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)  # Dodatkowy odstęp przed suwakami    
+    st.sidebar.markdown("<div style='height: 9px;'></div>", unsafe_allow_html=True)  # Dodatkowy odstęp przed suwakami    
     code_height = st.sidebar.slider("Wysokość okna kodu:", min_value=100, max_value=600, value=200)
 
     # Zakładki: "Wyjaśnianie kodu" i "Historia"
