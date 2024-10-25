@@ -56,7 +56,7 @@ create_table(conn)
 # env = dotenv_values(".env")
 # API_KEY = env["OPENAI_API_KEY"]
 
-st.sidebar.title(":blue[Objaśniacz kodu]")
+# st.sidebar.title(":blue[Objaśniacz kodu]")
 
 # st.sidebar.header("Wklej swój klucz OpenAI API:")
 API_KEY = st.sidebar.text_input("Wklej swój klucz OpenAI API:", type="password")
