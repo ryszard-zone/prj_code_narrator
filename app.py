@@ -1,5 +1,6 @@
 from datetime import datetime
 import streamlit as st
+from streamlit_ace import st_ace
 from openai import OpenAI
 from dotenv import dotenv_values
 from dbase import *
@@ -13,13 +14,13 @@ def get_description(text, mode, language):
     if mode == "szczegółowy":
         prompt = f"Provide a detailed line-by-line description of the following code in {language}:\n\n{text}"
     else:
-        prompt = f"Provide a general description of what the following code does in {language}:\n\n{text}"
+        prompt = f"Provide a simple  in one sentencee description of what the following code does in {language}:\n\n{text}"
 
     # response = openai.ChatCompletion.create(
     response = openai_client.chat.completions.create(
         model="gpt-4o",
         messages=[
-            {"role": "system", "content": "You are a helpful assistant that describes code."},
+            {"role": "system", "content": "You are a helpful assistant that describes {prg_language} code."},
             {"role": "user", "content": prompt}
         ],
         max_tokens=300,
@@ -55,6 +56,8 @@ create_table(conn)
 # env = dotenv_values(".env")
 # API_KEY = env["OPENAI_API_KEY"]
 
+st.sidebar.title(":blue[Objaśniacz kodu]")
+
 st.sidebar.header("Wklej swój klucz OpenAI API:")
 API_KEY = st.sidebar.text_input("OpenAI API Key", type="password")
 
@@ -62,19 +65,18 @@ openai_client = OpenAI(api_key=API_KEY)
 
 def main():
 
-    st.title(":blue[Objaśniacz kodu]")
-
-    st.sidebar.header("Wklej swój klucz OpenAI API:")
-
     # Nowa postać instrukcji na lewym panelu
     st.sidebar.markdown("<div style='height: 100px;'></div>", unsafe_allow_html=True)
     st.sidebar.markdown("<h4 style='color: blue;'>Jak korzystać z aplikacji</h4>", unsafe_allow_html=True)
     st.sidebar.markdown("1. podaj swój klucz API OpenAI")
     st.sidebar.markdown("2. działa w 2 trybach: <span style='color: green;'>szczegółowy</span> - *opisuje każdą linię kodu* ; <span style='color: green;'>ogólny</span> - *opisuje cały kod w jednym zdaniu*", unsafe_allow_html=True)
     st.sidebar.markdown("3. wyjaśnienie jest udzielane w języku <span style='color: green;'>polskim</span> lub <span style='color: green;'>angielskim</span>", unsafe_allow_html=True)
-    st.sidebar.markdown('4. Można pytać nie tylko o kod, ale np. "Co to jest polimorfizm"', unsafe_allow_html=True)
+    st.sidebar.markdown('4. Można pytać o kod w wybranym języku programowania', unsafe_allow_html=True)
     st.sidebar.markdown('5. "Usuń kod" naciskamy dwukrotnie', unsafe_allow_html=True)
     st.sidebar.markdown('6. Historia pokazuje tylko 20 ostatnich objaśnień', unsafe_allow_html=True)
+
+    st.sidebar.markdown("<div style='height: 50px;'></div>", unsafe_allow_html=True)  # Dodatkowy odstęp   
+    prg_language = st.sidebar.selectbox("Wybierz język:", ["python", "sql", "c", "rust"])
 
     st.sidebar.markdown("<div style='height: 50px;'></div>", unsafe_allow_html=True)  # Dodatkowy odstęp przed suwakami    
     code_height = st.sidebar.slider("Wysokość okna kodu:", min_value=100, max_value=600, value=200)
@@ -94,17 +96,35 @@ def main():
             st.session_state['output_filename'] = "wyjasnienie.mp3"
 
 
-
-        # Display the text area with the dynamic height
-        # code_input = st.text_area("Tu wprowadź kod:", height=code_height)
-        # code_input = st.text_area("Tu wprowadź kod:", value=st.session_state['code_input'], height=code_height, key="code_input_area")
-        # code_input = st.text_area("Tu wprowadź kod:", height=200)
-
         # Display the text area with the dynamic height, bind it to the session state
+        # if st.session_state['clear_code']:
+        #     code_input = st.text_area("Tu wprowadź kod:", value="", height=code_height, key="code_input_area")
+        # else:
+        #     code_input = st.text_area("Tu wprowadź kod:", value=st.session_state['code_input'], height=code_height, key="code_input_area")
+
+
+        st.text("Wpisz / wklej kod:")
+
         if st.session_state['clear_code']:
-            code_input = st.text_area("Tu wprowadź kod:", value="", height=code_height, key="code_input_area")
+            code_input = st_ace(
+                language=prg_language,
+                theme='monokai', 
+                value="", 
+                font_size = 18,
+                height=code_height,
+                auto_update=True,
+                key="code_input_area"
+            )       
         else:
-            code_input = st.text_area("Tu wprowadź kod:", value=st.session_state['code_input'], height=code_height, key="code_input_area")
+            code_input = st_ace(
+                language=prg_language,
+                theme='monokai', 
+                value=st.session_state['code_input'], 
+                font_size = 18,
+                height=code_height,
+                auto_update=True,
+                key="code_input_area"
+            )       
 
         # Create columns for buttons and radio selections
         col1, col2, col3, col4 = st.columns([1, 2, 2, 1])
@@ -138,6 +158,8 @@ def main():
                 st.session_state['code_input'] = ""
                 st.session_state['description'] = None
                 st.session_state['clear_code'] = True
+                # code_input = ""None""
+                # st.rerun()
 
         # Display the description if it exists
         if st.session_state['description']:
