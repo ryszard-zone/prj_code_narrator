@@ -32,7 +32,7 @@ def get_description(text, mode, language):
 def generate_speech(text, voice, output_filename):
     # OpenAI client for generating speech
     response = openai_client.audio.speech.create(
-        model="tts-1",
+        model="tts-1",git status
         voice='onyx',
         response_format="mp3",
         input=text,
