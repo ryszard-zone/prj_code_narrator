@@ -10,10 +10,10 @@ from io import BytesIO
 
 import httpx
 
+st.set_page_config(page_title="Objasniacz kodu", layout="wide")
+
 st.write(f"OpenAI version: {openai.__version__}")
 st.write(f"httpx version: {httpx.__version__}")
-
-st.set_page_config(page_title="Objasniacz kodu", layout="wide")
 
 # def get_description(api_key, text, mode, language):
 def get_description(text, mode, language):
