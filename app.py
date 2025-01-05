@@ -1,10 +1,17 @@
 from datetime import datetime
 import streamlit as st
 from streamlit_ace import st_ace
+import openai
+
 from openai import OpenAI
 from dotenv import dotenv_values
 from dbase import *
 from io import BytesIO
+
+import httpx
+
+st.write(f"OpenAI version: {openai.__version__}")
+st.write(f"httpx version: {httpx.__version__}")
 
 st.set_page_config(page_title="Objasniacz kodu", layout="wide")
 
