@@ -59,9 +59,17 @@ create_table(conn)
 # st.sidebar.title(":blue[Objaśniacz kodu]")
 
 # st.sidebar.header("Wklej swój klucz OpenAI API:")
+# API_KEY = st.sidebar.text_input("Wklej swój klucz OpenAI API:", type="password")
+
+# openai_client = OpenAI(api_key=API_KEY)
+
 API_KEY = st.sidebar.text_input("Wklej swój klucz OpenAI API:", type="password")
 
-openai_client = OpenAI(api_key=API_KEY)
+if API_KEY:
+    openai_client = OpenAI(api_key=API_KEY)
+    st.success("Klucz API został pomyślnie wprowadzony.")
+else:
+    st.warning("Wprowadź klucz API, aby kontynuować.")
 
 def main():
 
