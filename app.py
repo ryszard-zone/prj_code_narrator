@@ -10,8 +10,8 @@ import os
 from dotenv import dotenv_values, load_dotenv
 
 from dbase import *
+from gtts import gTTS
 from io import BytesIO
-import pyttsx3
 import httpx
 
 st.set_page_config(page_title="Objasniacz kodu", layout="wide")
@@ -66,37 +66,57 @@ def get_description(text, mode, language, tokens):
     description = response.choices[0].message.content.strip()
     return description
 
-def generate_speech(text, voice, output_filename):
+def generate_speech(text, voice="onyx"):
     # OpenAI client for generating speech
     response = openai_client.audio.speech.create(
         model="tts-1",
-        voice='onyx',
+        voice=voice,
         response_format="mp3",
         input=text,
     )
     
-    # Create a BytesIO object to hold the audio data
+    # Utworzenie obiektu BytesIO do przechowywania danych audio
     audio_data = BytesIO(response.content)
     audio_data.seek(0)
 
-    return audio_data, output_filename
+    return audio_data
 
+    
 # Funkcja do czytania na głos
-def read_aloud(text, voice_name="onyx"):
-    engine = pyttsx3.init()
-    # Opcjonalnie ustawienia głosu
-    voices = engine.getProperty('voices')
-    selected_voice = next((v for v in voices if voice_name.lower() in v.name.lower()), None)
-    if selected_voice:
-        engine.setProperty('voice', selected_voice.id)
-    engine.say(text)
-    engine.runAndWait()
+def generate_audio(text, lang="pl"):
+    tts = gTTS(text=text, lang=lang)
+    audio_buffer = BytesIO()
+    tts.write_to_fp(audio_buffer)
+    audio_buffer.seek(0)
+    return audio_buffer
 
 
 # Definicja funkcji, która zostanie wywołana po zmianie wartości w st.text_input
 def update_filename():
     # Możesz tutaj zaktualizować wartość w session_state lub wykonać inne operacje
     st.session_state['output_filename'] = st.session_state['audio_filename']
+
+def preprocess_text_for_tts(text):
+    # Zamień cyfry na ich tekstową reprezentację
+    digit_map = {
+        "0": "zero",
+        "1": "jeden",
+        "2": "dwa",
+        "3": "trzy",
+        "4": "cztery",
+        "5": "pięć",
+        "6": "sześć",
+        "7": "siedem",
+        "8": "osiem",
+        "9": "dziewięć",
+    }
+    for digit, word in digit_map.items():
+        text = text.replace(digit, word)
+    # Zamień zmienne (np. pojedyncze litery) na pełne nazwy
+    text = text.replace(" b ", " zmienna b ")
+    return text
+
+
 
 # Ustawienie połączenia z bazą danych i utworzenie tabeli
 conn = create_connection()
@@ -114,15 +134,6 @@ else:
 # API_KEY = os.environ["OPENAI_API_KEY"]
 # openai_client = OpenAI(api_key=API_KEY)
 
-try:
-    import pyttsx3
-    from importlib.metadata import version
-    pyttsx3_version = version("pyttsx3")
-    st.write(f"Zainstalowana wersja pyttsx3: {pyttsx3_version}")
-except ModuleNotFoundError:
-    st.warning("Moduł pyttsx3 nie jest zainstalowany.")
-except Exception as e:
-    st.error(f"Błąd: {e}")
 
 def main():
 
@@ -259,10 +270,30 @@ def main():
                 st.subheader("Wyjaśnienie kodu:")
 
             with col_read_aloud:
+                # if st.button("Przeczytaj tekst na głos"):
+                #     # st.session_state['description'] = description
+                #     read_aloud(st.session_state['description'])
+                #     # st.success("Tekst został przeczytany na głos.")   
+
+                # if st.button("Przeczytaj tekst na głos"):
+                #     # st.session_state['description'] = description
+                #     audio_file = generate_audio(st.session_state['description'], lang="pl")  # "pl"
+                #     st.audio(audio_file, format="audio/mp3")
+
+            #    if st.button("Przeczytaj tekst na głos"):
+            #         # preprocessed_text = preprocess_text_for_tts(original_text)
+            #         st.session_state['description'] = preprocess_text_for_tts(st.session_state['description'])
+            #         audio_file = generate_audio(st.session_state['description'], lang="pl")  # "pl"
+            #         st.audio(audio_file, format="audio/mp3")
+
                 if st.button("Przeczytaj tekst na głos"):
-                    # st.session_state['description'] = description
-                    read_aloud(st.session_state['description'])
-                    # st.success("Tekst został przeczytany na głos.")   
+                    # Generowanie mowy za pomocą OpenAI
+                    try:
+                        audio_file = generate_speech(st.session_state['description'], voice="onyx")
+                        st.audio(audio_file, format="audio/mp3")
+                        # st.success("Tekst został przeczytany na głos.")
+                    except Exception as e:
+                        st.error(f"Wystąpił błąd podczas generowania mowy: {e}")
 
             st.write(st.session_state['description'])               
 
