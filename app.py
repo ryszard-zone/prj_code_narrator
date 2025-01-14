@@ -115,8 +115,10 @@ else:
 # openai_client = OpenAI(api_key=API_KEY)
 
 try:
-    # Wyświetlenie wersji pyttsx3
-    st.write(f"Zainstalowana wersja pyttsx3: {pyttsx3.__version__}")
+    import pyttsx3
+    from importlib.metadata import version
+    pyttsx3_version = version("pyttsx3")
+    st.write(f"Zainstalowana wersja pyttsx3: {pyttsx3_version}")
 except ModuleNotFoundError:
     st.warning("Moduł pyttsx3 nie jest zainstalowany.")
 except Exception as e:
