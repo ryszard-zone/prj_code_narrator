@@ -114,6 +114,14 @@ else:
 # API_KEY = os.environ["OPENAI_API_KEY"]
 # openai_client = OpenAI(api_key=API_KEY)
 
+try:
+    # Wyświetlenie wersji pyttsx3
+    st.write(f"Zainstalowana wersja pyttsx3: {pyttsx3.__version__}")
+except ModuleNotFoundError:
+    st.warning("Moduł pyttsx3 nie jest zainstalowany.")
+except Exception as e:
+    st.error(f"Błąd: {e}")
+
 def main():
 
     st.sidebar.markdown("<div style='height: 7px;'></div>", unsafe_allow_html=True)  # Dodatkowy odstęp   
