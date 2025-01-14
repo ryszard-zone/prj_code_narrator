@@ -10,7 +10,7 @@ import os
 from dotenv import dotenv_values, load_dotenv
 
 from dbase import *
-from gtts import gTTS
+# from gtts import gTTS
 from io import BytesIO
 import httpx
 
@@ -81,14 +81,14 @@ def generate_speech(text, voice="onyx"):
 
     return audio_data
 
-    
+
 # Funkcja do czytania na głos
-def generate_audio(text, lang="pl"):
-    tts = gTTS(text=text, lang=lang)
-    audio_buffer = BytesIO()
-    tts.write_to_fp(audio_buffer)
-    audio_buffer.seek(0)
-    return audio_buffer
+# def generate_audio(text, lang="pl"):
+#     tts = gTTS(text=text, lang=lang)
+#     audio_buffer = BytesIO()
+#     tts.write_to_fp(audio_buffer)
+#     audio_buffer.seek(0)
+#     return audio_buffer
 
 
 # Definicja funkcji, która zostanie wywołana po zmianie wartości w st.text_input
