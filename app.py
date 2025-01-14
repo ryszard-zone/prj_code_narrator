@@ -106,7 +106,6 @@ API_KEY = st.sidebar.text_input("Wklej swój klucz OpenAI API:", type="password"
 
 if API_KEY:
     openai_client = OpenAI(api_key=API_KEY)
-    # st.sidebar.success("")
 else:
     st.sidebar.warning("Wpisz klucz API, aby kontynuować")
 
