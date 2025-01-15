@@ -1,8 +1,10 @@
 import sqlite3
+import time
 
 def create_connection(db_name="historia.db"):
-    """Create a database connection to the SQLite database."""
-    conn = sqlite3.connect(db_name)
+    """Create a database connection to the SQLite database with WAL mode enabled."""
+    conn = sqlite3.connect(db_name, check_same_thread=False)
+    conn.execute("PRAGMA journal_mode=WAL")  # Enable WAL mode
     return conn
 
 def create_table(conn):
@@ -17,13 +19,22 @@ def create_table(conn):
         )
         ''')
 
-def insert_history(conn, code_input, description):
-    """Insert a new record into the 'historia' table."""
-    with conn:
-        conn.execute('''
-        INSERT INTO historia (code_input, description) 
-        VALUES (?, ?)
-        ''', (code_input, description))
+def safe_insert_history(conn, code_input, description, retries=5, delay=0.1):
+    """Insert a new record into the 'historia' table with retry logic."""
+    for attempt in range(retries):
+        try:
+            with conn:
+                conn.execute('''
+                INSERT INTO historia (code_input, description) 
+                VALUES (?, ?)
+                ''', (code_input, description))
+            return True  # Insert successful
+        except sqlite3.OperationalError as e:
+            if "locked" in str(e):
+                time.sleep(delay)  # Wait before retrying
+            else:
+                raise  # Re-raise other errors
+    return False  # Insert failed after retries
 
 def fetch_history(conn):
     """Fetch all records from the 'historia' table."""
@@ -46,3 +57,4 @@ def trim_history(conn, max_entries=20):
         )
         ''', (rows_to_delete,))
         conn.commit()
+
