@@ -53,7 +53,6 @@ def get_description(text, mode, language, tokens):
         temperature=0.1,
     )
 
-
     response = openai_client.chat.completions.create(
         model=st.session_state["current_model"],  # Bezpośrednio przekazujesz identyfikator modelu
         messages=[
@@ -92,29 +91,29 @@ def generate_speech(text, voice="onyx"):
 
 
 # Definicja funkcji, która zostanie wywołana po zmianie wartości w st.text_input
-def update_filename():
-    # Możesz tutaj zaktualizować wartość w session_state lub wykonać inne operacje
-    st.session_state['output_filename'] = st.session_state['audio_filename']
+# def update_filename():
+#     # Możesz tutaj zaktualizować wartość w session_state lub wykonać inne operacje
+#     st.session_state['output_filename'] = st.session_state['audio_filename']
 
-def preprocess_text_for_tts(text):
-    # Zamień cyfry na ich tekstową reprezentację
-    digit_map = {
-        "0": "zero",
-        "1": "jeden",
-        "2": "dwa",
-        "3": "trzy",
-        "4": "cztery",
-        "5": "pięć",
-        "6": "sześć",
-        "7": "siedem",
-        "8": "osiem",
-        "9": "dziewięć",
-    }
-    for digit, word in digit_map.items():
-        text = text.replace(digit, word)
-    # Zamień zmienne (np. pojedyncze litery) na pełne nazwy
-    text = text.replace(" b ", " zmienna b ")
-    return text
+# def preprocess_text_for_tts(text):
+#     # Zamień cyfry na ich tekstową reprezentację
+#     digit_map = {
+#         "0": "zero",
+#         "1": "jeden",
+#         "2": "dwa",
+#         "3": "trzy",
+#         "4": "cztery",
+#         "5": "pięć",
+#         "6": "sześć",
+#         "7": "siedem",
+#         "8": "osiem",
+#         "9": "dziewięć",
+#     }
+#     for digit, word in digit_map.items():
+#         text = text.replace(digit, word)
+#     # Zamień zmienne (np. pojedyncze litery) na pełne nazwy
+#     text = text.replace(" b ", " zmienna b ")
+#     return text
 
 
 
@@ -170,6 +169,8 @@ def main():
         
     st.sidebar.markdown(f"**Wybrany model:** {st.session_state['current_model']}")
 
+    st.sidebar.markdown("---")  # Linia oddzielająca
+    st.sidebar.markdown("<div style='position: fixed; bottom: 10px; font-size: 12px; color: gray;'>wersja: 1.06.01</div>", unsafe_allow_html=True)
 
     tab1, tab2, tab3, tab4 = st.tabs(["Jak uzywać", "Kod => Opis", "Opis => kod", "Historia", ])
     
@@ -204,7 +205,7 @@ def main():
         #     code_input = st.text_area("Tu wprowadź kod:", value=st.session_state['code_input'], height=code_height, key="code_input_area")
 
 
-        st.text("Wpisz / wklej kod:")
+        st.text("Wpisz / wklej kod programu:")
 
         if st.session_state['clear_code']:
             code_input = st_ace(

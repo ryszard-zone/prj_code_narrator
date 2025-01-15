@@ -4,4 +4,3 @@ openai==1.57.2
 python-dotenv==1.0.1
 httpx>=0.23.0
 pip>=21.0
-pyttsx3==2.98
