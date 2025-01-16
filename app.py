@@ -13,7 +13,7 @@ from io import BytesIO
 import httpx
 
 st.set_page_config(page_title="Objasniacz kodu", layout="wide")
-st.sidebar.markdown("<div style='position: fixed; bottom: 10px; font-size: 12px; color: gray;'>wersja: 1.06.03</div>", unsafe_allow_html=True)
+st.sidebar.markdown("<div style='position: fixed; bottom: 10px; font-size: 12px; color: gray;'>wersja: 1.06.04</div>", unsafe_allow_html=True)
 
 # # Dodanie stylu CSS dla zakładek
 # st.markdown("""
@@ -75,17 +75,17 @@ def generate_speech(text, voice="onyx"):
 conn = create_connection()
 create_table(conn)
 
-# API_KEY = st.sidebar.text_input("Wklej swój klucz OpenAI API:", type="password")
+API_KEY = st.sidebar.text_input("Wklej swój klucz OpenAI API:", type="password")
 
-# if API_KEY:
-#     openai_client = OpenAI(api_key=API_KEY)
-# else:
-#     st.sidebar.warning("Wpisz klucz API, aby kontynuować")
+if API_KEY:
+    openai_client = OpenAI(api_key=API_KEY)
+else:
+    st.sidebar.warning("Wpisz klucz API, aby kontynuować")
 
 
-load_dotenv()
-API_KEY = os.environ["OPENAI_API_KEY"]
-openai_client = OpenAI(api_key=API_KEY)
+# load_dotenv()
+# API_KEY = os.environ["OPENAI_API_KEY"]
+# openai_client = OpenAI(api_key=API_KEY)
 
 
 def main():
