@@ -13,7 +13,7 @@ from io import BytesIO
 import httpx
 
 st.set_page_config(page_title="Objasniacz kodu", layout="wide")
-st.sidebar.markdown("<div style='position: fixed; bottom: 10px; font-size: 12px; color: gray;'>wersja: 1.06.04</div>", unsafe_allow_html=True)
+st.sidebar.markdown("<div style='position: fixed; bottom: 10px; font-size: 12px; color: gray;'>wersja: 1.06.05</div>", unsafe_allow_html=True)
 
 # # Dodanie stylu CSS dla zakładek
 # st.markdown("""
@@ -127,7 +127,7 @@ def main():
     # st.sidebar.markdown("<div style='position: fixed; bottom: 10px; font-size: 12px; color: gray;'>wersja: 1.06.02</div>", unsafe_allow_html=True)
 
     
-    tab1, tab2, tab3, tab4 = st.tabs(["Jak uzywać", "Kod => Opis", "Opis => kod", "Historia", ])
+    tab1, tab2, tab3, tab4 = st.tabs(["Jak uzywać", "Kod => Opis", ".....", "Historia", ])
     
     with tab1:
 
